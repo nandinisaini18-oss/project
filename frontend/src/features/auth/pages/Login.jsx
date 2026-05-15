@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router';
+import { useAuth } from '../hook/useAuth';
 
 const Login = () => {
+  const {handleLogin} = useAuth()
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -9,11 +11,16 @@ const Login = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Login attempt:', formData);
-    // Add auth logic here
-  };
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    try{
+        await handleLogin(formData)
+        console.log("logged in successfully")
+    }catch(err){
+        console.log(err.message)
+    }
+}
 
   return (
     <div className="min-h-screen flex bg-[#F5F2E9] font-sans">

@@ -5,21 +5,32 @@ import { useDispatch } from "react-redux"
 export const useAuth = () => {
     const dispatch = useDispatch()
 
-    async function handleRegister(FormData){
+    async function handleRegister(formData){
         dispatch(setLoading(true))
-        const data = await register(FormData)
+        const data = await register(formData)
         dispatch(setUser(data.user))
         dispatch(setLoading(false))
         return data.user
     }
 
-    async function handleLogin(FormData){
+    async function handleLogin(formData){
+    try{
         dispatch(setLoading(true))
-        const data = await login(FormData)
+
+        const data = await login(formData)
+
         dispatch(setUser(data.user))
-        dispatch(setLoading(false))
+
         return data.user
+
+    }catch(err){
+        dispatch(setError(err.response?.data?.message))
+        throw err
+
+    }finally{
+        dispatch(setLoading(false))
     }
+}
 
     async function handleGetMe(){
         const data = await getMe()

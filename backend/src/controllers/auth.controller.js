@@ -1,6 +1,7 @@
 import userModel from "../models/user.model.js"
 import jwt from "jsonwebtoken"
 import { config } from "../config/config.js"
+import { uploadProfilePicture } from "../utils/uploadImage.js"
 
 async function createToken(res , user , message){
     const token = jwt.sign({
@@ -9,10 +10,10 @@ async function createToken(res , user , message){
         {expiresIn : "7d"}
     )
 
-    res.cookie("token" , token , {
-        httpOnly : true,
-        sameSite : "strict",
-        secure : true
+    res.cookie("token", token, {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: false,
     })
 
     res.status(201).json({
@@ -35,7 +36,24 @@ async function createToken(res , user , message){
 }
 
 export async function register(req , res){
-    const{fullname , email , password , contact , bio , age , gender , location , profilePicture , role , preferences} = req.body
+    const{
+        fullname,
+        email,
+        password,
+        contact,
+        bio,
+        age,
+        gender,
+        city,
+        state,
+        role,
+        preferences
+    } = req.body
+
+    const location = {
+        city,
+        state
+    }
 
     try{
 
@@ -48,6 +66,17 @@ export async function register(req , res){
             })
         }
 
+        let uploadedProfilePicture = ""
+
+        if(req.file){
+
+            uploadedProfilePicture =
+                await uploadProfilePicture(
+                    req.file.buffer,
+                    req.file.originalname
+                )
+        }
+
         const user = await userModel.create({
             fullname , 
             email , 
@@ -57,7 +86,7 @@ export async function register(req , res){
             age , 
             gender , 
             location , 
-            profilePicture , 
+            profilePicture : uploadedProfilePicture, 
             role , 
             preferences
         })
@@ -65,11 +94,14 @@ export async function register(req , res){
         return await createToken(res , user , "user registered successfully")
 
     }catch(err){
-        return res.status(500).json({
-            message : "something went wrong",
-            success : false
-        })
-    }
+
+    console.log(err)
+
+    return res.status(500).json({
+        message : err.message,
+        success : false
+    })
+}
 }
 
 export async function login(req , res){
@@ -142,7 +174,11 @@ export async function getMe(req , res){
 }
 
 export async function logout(req , res){
-    res.clearCookie("token")
+    res.clearCookie("token", {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: false
+    })
 
     res.status(200).json({
         message : "user loggedout successfully",

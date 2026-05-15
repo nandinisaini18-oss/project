@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router';
+import { useAuth } from '../hook/useAuth';
 
 const Register = () => {
+  const { handleRegister } = useAuth()
   const [formData, setFormData] = useState({
     fullname: '',
     email: '',
@@ -37,11 +39,39 @@ const Register = () => {
     setFormData({ ...formData, role: selectedRole });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Register attempt:', formData);
-    // Add registration logic here
-  };
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const submitData = new FormData();
+
+    submitData.append("fullname", formData.fullname);
+    submitData.append("email", formData.email);
+    submitData.append("password", formData.password);
+    submitData.append("contact", formData.contact);
+    submitData.append("bio", formData.bio);
+    submitData.append("age", formData.age);
+    submitData.append("gender", formData.gender);
+    submitData.append("role", formData.role);
+
+    submitData.append("city", formData.location.city);
+    submitData.append("state", formData.location.state);
+
+    if(formData.profilePicture){
+      submitData.append(
+        "profilePicture",
+        formData.profilePicture
+      );
+    }
+
+    await handleRegister(submitData);
+
+    console.log("registered successfully");
+
+  } catch(err) {
+    console.log(err.message);
+  }
+};
 
   return (
     <div className="min-h-screen flex bg-[#F5F2E9] font-sans">

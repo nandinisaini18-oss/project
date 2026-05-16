@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router';
 import { useAuth } from '../hook/useAuth';
+import { useNavigate } from 'react-router';
 
 const Register = () => {
+  const navigate = useNavigate()
   const { handleRegister } = useAuth()
   const [formData, setFormData] = useState({
     fullname: '',
@@ -65,7 +67,7 @@ const Register = () => {
     }
 
     await handleRegister(submitData);
-
+    navigate("/login")
     console.log("registered successfully");
 
   } catch(err) {

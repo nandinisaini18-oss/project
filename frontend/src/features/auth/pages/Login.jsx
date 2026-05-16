@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router';
+import { useNavigate } from 'react-router';
 import { useAuth } from '../hook/useAuth';
 
 const Login = () => {
+  const navigate = useNavigate()
   const {handleLogin} = useAuth()
   const [formData, setFormData] = useState({
     email: '',
@@ -17,6 +19,7 @@ const Login = () => {
     try{
         await handleLogin(formData)
         console.log("logged in successfully")
+        navigate("/preferences")
     }catch(err){
         console.log(err.message)
     }

@@ -1,19 +1,8 @@
-// src/hook/useUser.js
-
 import { useDispatch, useSelector } from "react-redux";
 
-import {
-    updatePreferences,
-    getProfile,
-    updateProfile
-} from "../service/user.api";
+import { updatePreferences, getProfile, updateProfile} from "../service/user.api";
 
-import {
-    setProfile,
-    setProfileCompleted,
-    setLoading,
-    setError
-} from "../state/user.slice";
+import { setProfile, setProfileCompleted, setLoading, setError} from "../state/user.slice";
 
 export function useUser() {
 
@@ -28,13 +17,8 @@ export function useUser() {
         try {
 
             dispatch(setLoading(true));
-
-            const response =
-                await getProfile();
-
-            dispatch(
-                setProfile(response.user)
-            );
+            const response = await getProfile();
+            dispatch(setProfile(response.user));
 
             return response;
 

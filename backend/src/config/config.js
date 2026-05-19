@@ -13,16 +13,16 @@ if(!process.env.IMAGEKIT_PRIVATE_KEY){
     throw new Error("IMAGEKIT_PRIVATE_KEY is not defined in environment variables")
 }
 
-if(!process.env.NODE_ENV){
-    throw new Error("NODE_ENV is not defined in environment variables")
-}
-
 if(!process.env.IMAGEKIT_PUBLIC_KEY){
     throw new Error("IMAGEKIT_PUBLIC_KEY is not defined in environment variables")
 }
 
 if(!process.env.IMAGEKIT_URL_ENDPOINT){
     throw new Error("IMAGEKIT_URL_ENDPOINT is not defined in environment variables")
+}
+
+if(!process.env.NODE_ENV){
+    throw new Error("NODE_ENV is not defined in environment variables")
 }
 
 export const config = {

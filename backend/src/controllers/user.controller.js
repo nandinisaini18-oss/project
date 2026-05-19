@@ -7,8 +7,7 @@ export async function getProfile(req, res) {
 
     try {
 
-        const user = await userModel
-            .findById(userId);
+        const user = await userModel.findById(userId);
 
         if(!user) {
 
@@ -56,7 +55,6 @@ export async function updateProfile(req, res) {
             bio,
             age,
             gender,
-
             location: {
                 city,
                 state
@@ -65,22 +63,16 @@ export async function updateProfile(req, res) {
 
         if(req.file) {
 
-            const uploadedProfilePicture =
-                await uploadProfilePicture(
+            const uploadedProfilePicture = await uploadProfilePicture(
                     req.file.buffer,
                     req.file.originalname
                 );
 
-            updateData.profilePicture =
-                uploadedProfilePicture;
+            updateData.profilePicture = uploadedProfilePicture;
         }
 
-        const updatedUser =
-            await userModel.findByIdAndUpdate(
-
-                userId,
-
-                updateData,
+        const updatedUser = await userModel.findByIdAndUpdate(userId,
+            updateData,
 
                 {
                     new: true,
@@ -91,10 +83,7 @@ export async function updateProfile(req, res) {
         return res.status(200).json({
 
             success: true,
-
-            message:
-                "profile updated successfully",
-
+            message:"profile updated successfully",
             user: updatedUser
         });
 
@@ -107,17 +96,13 @@ export async function updateProfile(req, res) {
     }
 }
 
-export async function updatePreferences(
-    req,
-    res
-) {
+export async function updatePreferences(req , res) {
 
     const userId = req.user.id;
 
     try {
 
         const {
-
             sleepSchedule,
             diet,
             cleanliness,
@@ -133,14 +118,8 @@ export async function updatePreferences(
 
         } = req.body;
 
-        const updatedUser =
-            await userModel.findByIdAndUpdate(
-
-                userId,
-
-                {
+        const updatedUser = await userModel.findByIdAndUpdate(userId,{
                     preferences: {
-
                         sleepSchedule,
                         diet,
                         cleanliness,

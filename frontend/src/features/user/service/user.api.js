@@ -7,28 +7,21 @@ const userApi = axios.create({
 
 export async function getProfile() {
 
-    const response = await userApi.get(
-        "/profile"
-    );
+    const response = await userApi.get("/profile");
 
     return response.data;
 }
 
 export async function updatePreferences(data) {
 
-    const response = await userApi.patch(
-        "/preferences",
-        data
-    );
+    const response = await userApi.patch("/preferences",data);
 
     return response.data;
 }
 
 export async function updateProfile(data) {
 
-    const response = await userApi.patch(
-        "/profile",
-        data,
+    const response = await userApi.patch("/profile", data,
         {
             headers: {
                 "Content-Type":
